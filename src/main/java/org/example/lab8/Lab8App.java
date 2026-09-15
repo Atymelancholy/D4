@@ -12,11 +12,20 @@ import java.nio.file.Files;
 
 public final class Lab8App {
     public static void main(String[] args) throws Exception {
+        waitForClusterPeers();
         args = MPI.Init(args);
         try {
             run(args);
         } finally {
             MPI.Finalize();
+        }
+    }
+
+    static void waitForClusterPeers() throws InterruptedException {
+        String value = System.getenv("MPJ_INIT_DELAY_MS");
+        int delayMs = value == null ? 10000 : Integer.parseInt(value);
+        if (delayMs > 0) {
+            Thread.sleep(delayMs);
         }
     }
 
